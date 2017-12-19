@@ -7,14 +7,27 @@ import { facebookLogin } from '../actions';
 class AuthScreen extends Component {
     componentDidMount() {
         this.props.facebookLogin();
+        this.onAuthComplete(this.props);
+    }
+    componentWillReceiveProps(nextprops){
+        this.onAuthComplete(nextprops)
+    }
+    onAuthComplete(props) {
+        if(props.token){
+            this.props.navigation.navigate('map')
+        }
     }
     render() {
         return (
-            <View>
-                <Text>authenication screen</Text>
-            </View>
+            <View/>
         );
     }
 }
 
-export default connect(null, { facebookLogin })(AuthScreen);
+const mapStateToProps = (state) => {
+    return {
+        token: state.auth.token
+    }
+}
+
+export default connect(mapStateToProps, { facebookLogin })(AuthScreen);
